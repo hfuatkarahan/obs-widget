@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrol Paneli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .control-panel {
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+        }
+
+        .control-panel h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .control-panel label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .control-panel input, .control-panel select {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .control-panel button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h2>Kontrol Paneli</h2>
+        <label for="playerName">Oyuncu:</label>
+        <input type="text" id="playerName" placeholder="Oyuncu adını girin">
+
+        <label for="colorSelect">Renk Seç:</label>
+        <input type="color" id="colorSelect" value="#ffffff">
+
+        <label for="fontSize">Yazı Boyutu:</label>
+        <input type="range" id="fontSize" min="12" max="48" value="24"> <span id="fontSizeValue">24px</span>
+
+        <label for="fontWeight">Yazı Tipi:</label>
+        <select id="fontWeight">
+            <option value="normal">Normal</option>
+            <option value="bold">Kalın</option>
+            <option value="italic">İtalik</option>
+        </select>
+
+        <label for="shadowOpacity">Gölge Efekti:</label>
+        <input type="checkbox" id="shadowOpacity">
+
+        <label for="borderThickness">Kenarlık Kalınlığı:</label>
+        <input type="range" id="borderThickness" min="0" max="5" value="1"> <span id="borderThicknessValue">1px</span>
+
+        <label for="borderColor">Kenarlık Rengi:</label>
+        <input type="color" id="borderColor" value="#000000">
+
+        <button onclick="addPlayer()" style="background-color: #4CAF50; color: white;">Oyuncu Ekle</button>
+        <button onclick="removePlayer()" style="background-color: #f44336; color: white;">Oyuncu Sil</button>
+        <button onclick="resetSettings()" style="background-color: #ccc;">Sıfırla</button>
+
+        <label for="removePlayerName">Yeniden Oyuncu Ekle:</label>
+        <input type="text" id="removePlayerName" placeholder="Silmek için oyuncu adını girin">
+    </div>
+
+    <script>
+        let players = JSON.parse(localStorage.getItem('players')) || [];
+
+        function addPlayer() {
+            const name = document.getElementById('playerName').value;
+            if (!name) return alert('Lütfen bir oyuncu adı girin!');
+
+            const color = document.getElementById('colorSelect').value;
+            const fontSize = document.getElementById('fontSize').value;
+            const fontWeight = document.getElementById('fontWeight').value;
+            const shadow = document.getElementById('shadowOpacity').checked;
+            const borderThickness = document.getElementById('borderThickness').value;
+            const borderColor = document.getElementById('borderColor').value;
+
+            players.push({
+                name,
+                color,
+                fontSize,
+                fontWeight,
+                shadow,
+                borderThickness,
+                borderColor
+            });
+
+            localStorage.setItem('players', JSON.stringify(players));
+        }
+
+        function removePlayer() {
+            const nameToRemove = document.getElementById('removePlayerName').value;
+            if (!nameToRemove) return alert('Lütfen silmek için bir oyuncu adı girin!');
+
+            players = players.filter(player => player.name !== nameToRemove);
+            localStorage.setItem('players', JSON.stringify(players));
+        }
+
+        function resetSettings() {
+            document.getElementById('colorSelect').value = '#ffffff';
+            document.getElementById('fontSize').value = 24;
+            document.getElementById('fontSizeValue').textContent = '24px';
+            document.getElementById('fontWeight').value = 'normal';
+            document.getElementById('shadowOpacity').checked = false;
+            document.getElementById('borderThickness').value = 1;
+            document.getElementById('borderThicknessValue').textContent = '1px';
+            document.getElementById('borderColor').value = '#000000';
+        }
+
+        document.getElementById('fontSize').addEventListener('input', function() {
+            document.getElementById('fontSizeValue').textContent = this.value + 'px';
+        });
+
+        document.getElementById('borderThickness').addEventListener('input', function() {
+            document.getElementById('borderThicknessValue').textContent = this.value + 'px';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+
+        #display {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            color: white;
+            font-size: 24px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .player {
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0px black;
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div id="display"></div>
+
+    <script>
+        function loadPlayers() {
+            const display = document.getElementById('display');
+            display.innerHTML = '';
+            const players = JSON.parse(localStorage.getItem('players')) || [];
+            players.forEach(player => {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'player';
+                playerDiv.textContent = player.name;
+                playerDiv.style.color = player.color;
+                playerDiv.style.fontSize = player.fontSize + 'px';
+                playerDiv.style.fontWeight = player.fontWeight.includes('bold') ? 'bold' : 'normal';
+                playerDiv.style.fontStyle = player.fontWeight.includes('italic') ? 'italic' : 'normal';
+                playerDiv.style.textShadow = player.shadow ? `${player.borderThickness}px ${player.borderThickness}px 0px ${player.borderColor}` : 'none';
+                display.appendChild(playerDiv);
+            });
+        }
+
+        // Her saniye güncelle (OBS için)
+        setInterval(loadPlayers, 1000);
+        loadPlayers();
+    </script>
+</body>
+</html>
